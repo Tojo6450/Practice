@@ -6,15 +6,26 @@ import "./App.css"
 const App = ()=>{
 const [task, setTask] = useState([]);
 const [inputValue, setInputValue] = useState("");
+// const [check,setCheck]= useState(false);
 
 const handleSubmit = (e) => {
   // e.preventDefault();
-  setTask((prev) => [...prev, inputValue]);
+  setTask((prev) => [...prev, {text:inputValue,checked:false}]);
   setInputValue("");
 }
 
 const handleDelete = (value)=>{
   const updatedtask = task.filter((curtask)=>{ return curtask!==value})
+  setTask(updatedtask)
+}
+
+const handleToggle = (content)=>{
+  const updatedtask = task.map((t)=>{
+    if(t.text==content.text){
+      return {...t,checked:!content.checked}
+    }
+    return t;
+  })
   setTask(updatedtask)
 }
 
@@ -39,9 +50,13 @@ useEffect(() => {
         <div>
         <ul>
         {task.map((t, index) => (
-          <li key={index}>{t}
+          <li key={index} >
+          <span className= {t.checked ? "toggle":" "}>{t.text}</span>
+          <div>
+          <button className="btn1" onClick={()=>handleToggle(t)}>Toggle</button>
           <button className='btn' onClick={()=>handleDelete(t)}
           >delete</button>
+          </div>
           </li>
         ))}
       </ul>
